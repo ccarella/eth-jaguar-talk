@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import SwapPanel from './components/SwapPanel';
+import BalanceCard from './components/BalanceCard';
 import { useAccount, useBalance } from 'wagmi';
 import {
   ConnectWallet,
@@ -25,6 +26,12 @@ export default function App() {
   const USDC_BASE_ADDRESS = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913' as `0x${string}`;
 
   const { address } = useAccount();
+
+  // Mock USD prices - in production, these would come from an API
+  const MOCK_PRICES = {
+    ETH: 2814.56,
+    USDC: 1.00,
+  };
 
   const { data: ethBalance } = useBalance({
     address,
@@ -120,26 +127,32 @@ export default function App() {
                       <Address />
                       <EthBalance />
                     </Identity>
-                    <div className="pt-2 border-t border-gray-200 dark:border-gray-800">
-                      <h2 className="text-sm font-medium mb-2">Balances</h2>
-                      <div className="space-y-2">
+                    <div className="pt-6 border-t border-gray-200 dark:border-gray-800">
+                      <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Balances</h2>
+                      <div className="space-y-3">
                         {ethBalance && ethBalance.value > BigInt(0) && (
-                          <div className="flex items-center justify-between text-sm">
-                            <span className="text-gray-700 dark:text-gray-200">Ethereum</span>
-                            <span className="font-mono">{ethBalance.formatted} {ethBalance.symbol}</span>
-                          </div>
+                          <BalanceCard
+                            balance={ethBalance}
+                            usdPrice={MOCK_PRICES.ETH}
+                            showDetails={true}
+                          />
                         )}
                         {usdcBalance && usdcBalance.value > BigInt(0) && (
-                          <div className="flex items-center justify-between text-sm">
-                            <span className="text-gray-700 dark:text-gray-200">USDC</span>
-                            <span className="font-mono">{usdcBalance.formatted} {usdcBalance.symbol}</span>
-                          </div>
+                          <BalanceCard
+                            balance={usdcBalance}
+                            usdPrice={MOCK_PRICES.USDC}
+                            showDetails={true}
+                          />
                         )}
                         {!ethBalance && !usdcBalance && (
-                          <p className="text-sm text-gray-600 dark:text-gray-300">Fetching balances…</p>
+                          <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                            <p className="text-sm text-gray-600 dark:text-gray-300 text-center">Fetching balances…</p>
+                          </div>
                         )}
                         {ethBalance && usdcBalance && ethBalance.value === BigInt(0) && usdcBalance.value === BigInt(0) && (
-                          <p className="text-sm text-gray-600 dark:text-gray-300">No ETH or USDC found.</p>
+                          <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                            <p className="text-sm text-gray-600 dark:text-gray-300 text-center">No ETH or USDC found.</p>
+                          </div>
                         )}
                       </div>
                     </div>
