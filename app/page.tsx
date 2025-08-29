@@ -63,10 +63,11 @@ export default function App() {
   };
   return (
     <div className="flex flex-col min-h-screen font-sans dark:bg-background dark:text-white bg-white text-black">
-      <header className="pt-4 px-4">
-        <div className="flex justify-between items-center">
-          <h1 className="text-lg font-semibold">ccarella @ ETH Jaguar</h1>
-          <div className="wallet-container">
+      <header className="pt-4">
+        <div className="max-w-4xl mx-auto w-full px-4">
+          <div className="flex justify-between items-center">
+            <h1 className="text-lg font-semibold">ccarella @ ETH Jaguar</h1>
+            <div className="wallet-container">
             <Wallet>
               <ConnectWallet>
                 <Avatar className="h-6 w-6" />
