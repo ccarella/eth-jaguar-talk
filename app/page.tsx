@@ -68,30 +68,30 @@ export default function App() {
           <div className="flex justify-between items-center">
             <h1 className="text-lg font-semibold">ccarella @ ETH Jaguar</h1>
             <div className="wallet-container">
-            <Wallet>
-              <ConnectWallet>
-                <Avatar className="h-6 w-6" />
-                <Name />
-              </ConnectWallet>
-              <WalletDropdown>
-                <Identity className="px-4 pt-3 pb-2" hasCopyAddressOnClick>
-                  <Avatar />
+              <Wallet>
+                <ConnectWallet>
+                  <Avatar className="h-6 w-6" />
                   <Name />
-                  <Address />
-                  <EthBalance />
-                </Identity>
-                <WalletDropdownLink
-                  icon="wallet"
-                  href="https://keys.coinbase.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Wallet
-                </WalletDropdownLink>
-                <WalletDropdownDisconnect />
-              </WalletDropdown>
-            </Wallet>
-          </div>
+                </ConnectWallet>
+                <WalletDropdown>
+                  <Identity className="px-4 pt-3 pb-2" hasCopyAddressOnClick>
+                    <Avatar />
+                    <Name />
+                    <Address />
+                    <EthBalance />
+                  </Identity>
+                  <WalletDropdownLink
+                    icon="wallet"
+                    href="https://keys.coinbase.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Wallet
+                  </WalletDropdownLink>
+                  <WalletDropdownDisconnect />
+                </WalletDropdown>
+              </Wallet>
+            </div>
         </div>
       </header>
 
