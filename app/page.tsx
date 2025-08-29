@@ -63,8 +63,9 @@ export default function App() {
   };
   return (
     <div className="flex flex-col min-h-screen font-sans dark:bg-background dark:text-white bg-white text-black">
-      <header className="pt-4 pr-4">
-        <div className="flex justify-end">
+      <header className="pt-4 px-4">
+        <div className="flex justify-between items-center">
+          <h1 className="text-lg font-semibold">ccarella @ ETH Jaguar</h1>
           <div className="wallet-container">
             <Wallet>
               <ConnectWallet>
