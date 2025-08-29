@@ -1,0 +1,17 @@
+---
+alwaysApply: false
+description: Web3 integration guidance for OnchainKit, wagmi, viem on Base
+---
+# Web3 Integration
+
+- **Providers**: Configure OnchainKit and wagmi in [app/providers.tsx](mdc:app/providers.tsx); wrap the App for Base network.
+- **Libraries**: Use OnchainKit, wagmi v2, and viem v2 for blockchain interactions.
+- **Environment**:
+  - `NEXT_PUBLIC_ONCHAINKIT_API_KEY` (required)
+  - `NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME`
+- **Docs**:
+  - OnchainKit: `https://onchainkit.xyz/getting-started`
+  - Base OnchainKit: `https://docs.base.org/onchainkit/getting-started`
+- **Patterns**:
+  - Use wagmi hooks for wallet and contract interactions.
+  - Default logic in server components; switch to client components only when interacting with wallet/browser APIs.

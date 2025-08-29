@@ -1,0 +1,28 @@
+---
+alwaysApply: false
+description: Common development commands and verification steps
+---
+# Development Commands
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm run start
+
+# Run linter
+npm run lint
+
+# Type checking (no emit)
+npx tsc --noEmit
+```
+
+- Run linter and type-check before committing.
+- Test changes locally with `npm run dev`; verify production builds with `npm run build`.
