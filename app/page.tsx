@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+import { useAccount, useBalance } from 'wagmi';
 import {
   ConnectWallet,
   Wallet,
@@ -14,28 +16,50 @@ import {
   Identity,
   EthBalance,
 } from '@coinbase/onchainkit/identity';
-import ArrowSvg from './svg/ArrowSvg';
-import ImageSvg from './svg/Image';
-import OnchainkitSvg from './svg/OnchainKit';
-
-const components = [
-  {
-    name: 'Transaction',
-    url: 'https://onchainkit.xyz/transaction/transaction',
-  },
-  { name: 'Swap', url: 'https://onchainkit.xyz/swap/swap' },
-  { name: 'Checkout', url: 'https://onchainkit.xyz/checkout/checkout' },
-  { name: 'Wallet', url: 'https://onchainkit.xyz/wallet/wallet' },
-  { name: 'Identity', url: 'https://onchainkit.xyz/identity/identity' },
-];
-
-const templates = [
-  { name: 'NFT', url: 'https://github.com/coinbase/onchain-app-template' },
-  { name: 'Commerce', url: 'https://github.com/coinbase/onchain-commerce-template'},
-  { name: 'Fund', url: 'https://github.com/fakepixels/fund-component' },
-];
 
 export default function App() {
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'swap' | 'earn'>('dashboard');
+  const { isConnected } = useAccount();
+
+  const USDC_BASE_ADDRESS = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913' as `0x${string}`;
+
+  const { address } = useAccount();
+
+  const { data: ethBalance } = useBalance({
+    address,
+    query: { enabled: Boolean(address) },
+  });
+
+  const { data: usdcBalance } = useBalance({
+    address,
+    token: USDC_BASE_ADDRESS,
+    query: { enabled: Boolean(address) },
+  });
+
+  const TabButton = (
+    props: {
+      label: string;
+      isActive?: boolean;
+      disabled?: boolean;
+      onClick?: () => void;
+    }
+  ) => {
+    const { label, isActive, disabled, onClick } = props;
+    return (
+      <button
+        type="button"
+        onClick={disabled ? undefined : onClick}
+        disabled={disabled}
+        className={[
+          'px-4 py-2 text-sm rounded-md transition-colors',
+          isActive ? 'bg-black text-white dark:bg-white dark:text-black' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200',
+          disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200 dark:hover:bg-gray-700',
+        ].join(' ')}
+      >
+        {label}
+      </button>
+    );
+  };
   return (
     <div className="flex flex-col min-h-screen font-sans dark:bg-background dark:text-white bg-white text-black">
       <header className="pt-4 pr-4">
@@ -68,66 +92,62 @@ export default function App() {
         </div>
       </header>
 
-      <main className="flex-grow flex items-center justify-center">
-        <div className="max-w-4xl w-full p-4">
-          <div className="w-1/3 mx-auto mb-6">
-            <ImageSvg />
+      <main className="flex-grow">
+        <div className="max-w-4xl mx-auto w-full p-4">
+          <div className="flex gap-2 border-b border-gray-200 dark:border-gray-800 pb-4 mb-6">
+            <TabButton
+              label="Dashboard"
+              isActive={activeTab === 'dashboard'}
+              onClick={() => setActiveTab('dashboard')}
+            />
+            <TabButton label="Swap" disabled onClick={() => setActiveTab('swap')} />
+            <TabButton label="Earn" disabled onClick={() => setActiveTab('earn')} />
           </div>
-          <div className="flex justify-center mb-6">
-            <a target="_blank" rel="_template" href="https://onchainkit.xyz">
-              <OnchainkitSvg className="dark:text-white text-black" />
-            </a>
-          </div>
-          <p className="text-center mb-6">
-            Get started by editing
-            <code className="p-1 ml-1 rounded dark:bg-gray-800 bg-gray-200">app/page.tsx</code>.
-          </p>
-          <div className="flex flex-col items-center">
-            <div className="max-w-2xl w-full">
-              <div className="flex flex-col md:flex-row justify-between mt-4">
-                <div className="md:w-1/2 mb-4 md:mb-0 flex flex-col items-center">
-                  <p className="font-semibold mb-2 text-center">
-                    Explore components
+
+          {activeTab === 'dashboard' && (
+            <section className="space-y-4">
+              <h1 className="text-xl font-semibold">Dashboard</h1>
+              <div className="rounded-lg border border-gray-200 dark:border-gray-800 p-4">
+                {isConnected ? (
+                  <div className="space-y-4">
+                    <Identity hasCopyAddressOnClick>
+                      <Avatar />
+                      <Name />
+                      <Address />
+                      <EthBalance />
+                    </Identity>
+                    <div className="pt-2 border-t border-gray-200 dark:border-gray-800">
+                      <h2 className="text-sm font-medium mb-2">Balances</h2>
+                      <div className="space-y-2">
+                        {ethBalance && ethBalance.value > BigInt(0) && (
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-700 dark:text-gray-200">Ethereum</span>
+                            <span className="font-mono">{ethBalance.formatted} {ethBalance.symbol}</span>
+                          </div>
+                        )}
+                        {usdcBalance && usdcBalance.value > BigInt(0) && (
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-700 dark:text-gray-200">USDC</span>
+                            <span className="font-mono">{usdcBalance.formatted} {usdcBalance.symbol}</span>
+                          </div>
+                        )}
+                        {!ethBalance && !usdcBalance && (
+                          <p className="text-sm text-gray-600 dark:text-gray-300">Fetching balances…</p>
+                        )}
+                        {ethBalance && usdcBalance && ethBalance.value === BigInt(0) && usdcBalance.value === BigInt(0) && (
+                          <p className="text-sm text-gray-600 dark:text-gray-300">No ETH or USDC found.</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    Connect your wallet using the button in the header to view identity details.
                   </p>
-                  <ul className="list-disc pl-5 space-y-2 inline-block text-left">
-                    {components.map((component, index) => (
-                      <li key={index}>
-                        <a
-                          href={component.url}
-                          className="hover:underline inline-flex items-center dark:text-white text-black"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {component.name}
-                          <ArrowSvg />
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="md:w-1/2 flex flex-col items-center">
-                  <p className="font-semibold mb-2 text-center">
-                    Explore templates
-                  </p>
-                  <ul className="list-disc pl-5 space-y-2 inline-block text-left">
-                    {templates.map((template, index) => (
-                      <li key={index}>
-                        <a
-                          href={template.url}
-                          className="hover:underline inline-flex items-center dark:text-white text-black"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {template.name}
-                          <ArrowSvg/>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                )}
               </div>
-            </div>
-          </div>
+            </section>
+          )}
         </div>
       </main>
     </div>
