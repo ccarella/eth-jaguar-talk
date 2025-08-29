@@ -1,0 +1,14 @@
+---
+globs: *.ts,*.tsx
+---
+# TypeScript & React Conventions
+
+- Use explicit types for function signatures and public exports; strict type checking is enabled.
+- Prefer server components; add `"use client"` only when hooks/events or browser APIs are required.
+- Avoid `any`; model unknowns with precise types and discriminated unions when possible.
+- Use descriptive names (avoid 1–2 character identifiers). Keep functions small with early returns.
+- Handle errors explicitly; avoid empty catch blocks.
+- Organize imports: framework/libs, components, utils, styles. Remove unused imports.
+- Use `@/*` path alias for absolute imports as configured in `tsconfig.json`.
+- Keep JSX minimal and accessible: semantic tags, meaningful `alt`, and ARIA when needed.
+- Match existing formatting; wrap long lines and avoid deep nesting.

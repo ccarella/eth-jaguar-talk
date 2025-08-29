@@ -1,0 +1,10 @@
+---
+globs: app/**
+---
+# Next.js App Directory Guidelines
+
+- Route structure follows folder hierarchy under `app/` with `page.tsx` per route.
+- Use `layout.tsx` to share UI between routes; keep providers in `app/providers.tsx`.
+- Place route-specific components next to their route. Share generic UI under `app/(components|ui)` if introduced.
+- Prefer server actions and data fetching in server components; use client components for interactive UI only.
+- Keep SVGs under `app/svg/` as components.

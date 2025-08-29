@@ -1,0 +1,22 @@
+---
+alwaysApply: true
+---
+# Project Structure
+
+- **Framework**: Next.js 15+ with the App Router and TypeScript (strict mode).
+- **Blockchain Stack**: OnchainKit, wagmi v2, viem v2 targeting the Base network.
+- **Styling**: TailwindCSS (dark mode by default) via [tailwind.config.ts](mdc:tailwind.config.ts) and [postcss.config.mjs](mdc:postcss.config.mjs). Global styles in [app/globals.css](mdc:app/globals.css).
+- **App Shell**: Root layout at [app/layout.tsx](mdc:app/layout.tsx) and entry page at [app/page.tsx](mdc:app/page.tsx).
+- **Providers**: OnchainKit and app-wide providers are composed in [app/providers.tsx](mdc:app/providers.tsx) for Base network integration.
+- **SVG Components**: Reusable SVGs live in [app/svg](mdc:app/svg/).
+- **Config**: Next config at [next.config.mjs](mdc:next.config.mjs) (WalletConnect externals), TypeScript at [tsconfig.json](mdc:tsconfig.json) with path alias `@/*`.
+- **Reference**: See [CLAUDE.md](mdc:CLAUDE.md) for a deeper overview.
+
+## Environment Variables
+- `NEXT_PUBLIC_ONCHAINKIT_API_KEY` (required by OnchainKit)
+- `NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME` (used in page metadata)
+
+## Conventions
+- Prefer server components by default; use client components only when needed (`"use client"`).
+- Keep components small, composable, and colocate by feature within `app/`.
+- Prefer absolute imports via `@/*` alias when appropriate; otherwise, keep relative paths tidy.
