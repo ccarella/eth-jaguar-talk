@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import SwapPanel from './components/SwapPanel';
 import { useAccount, useBalance } from 'wagmi';
 import {
   ConnectWallet,
@@ -100,7 +101,7 @@ export default function App() {
               isActive={activeTab === 'dashboard'}
               onClick={() => setActiveTab('dashboard')}
             />
-            <TabButton label="Swap" disabled onClick={() => setActiveTab('swap')} />
+            <TabButton label="Swap" isActive={activeTab === 'swap'} onClick={() => setActiveTab('swap')} />
             <TabButton label="Earn" disabled onClick={() => setActiveTab('earn')} />
           </div>
 
@@ -143,6 +144,20 @@ export default function App() {
                 ) : (
                   <p className="text-sm text-gray-600 dark:text-gray-300">
                     Connect your wallet using the button in the header to view identity details.
+                  </p>
+                )}
+              </div>
+            </section>
+          )}
+          {activeTab === 'swap' && (
+            <section className="space-y-4">
+              <h1 className="text-xl font-semibold">Swap</h1>
+              <div className="rounded-lg border border-gray-200 dark:border-gray-800 p-4">
+                {isConnected ? (
+                  <SwapPanel />
+                ) : (
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    Connect your wallet using the button in the header to access the swap.
                   </p>
                 )}
               </div>
