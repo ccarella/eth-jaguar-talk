@@ -92,6 +92,7 @@ export default function App() {
                 </WalletDropdown>
               </Wallet>
             </div>
+          </div>
         </div>
       </header>
 
